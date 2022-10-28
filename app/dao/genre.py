@@ -7,7 +7,27 @@ class GenreDAO():
         self.session = session
 
     def get_all(self):
+        """Получение всех жанров"""
         return self.session.query(Genre).all()
 
     def get_by_id(self, gid):
+        """Получение жанра по id"""
         return self.session.query(Genre).get(gid)
+
+    def create(self, data):
+        """Создание нового жанра"""
+        genre = Genre(**data)
+        self.session.add(genre)
+        self.session.commit()
+
+    def update(self, data):
+        """Обновление данных в жанре"""
+        self.session.add(data)
+        self.session.commit()
+
+    def delete(self, gid):
+        """Удаление жанра"""
+        genre = self.get_by_id(gid)
+        self.session.delete(genre)
+        self.session.commit()
+
