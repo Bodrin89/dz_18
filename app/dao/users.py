@@ -6,6 +6,7 @@ class UserDAO():
         self.session = session
 
     def get_by_name(self, user_name):
+        print(self.session.query(User).filter(User.username == user_name).all())
         return self.session.query(User).filter(User.username == user_name).first()
 
     def create(self, data):

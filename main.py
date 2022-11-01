@@ -40,3 +40,4 @@ if __name__ == '__main__':
     configure_app(app)
     create_all()
     app.run()
+
