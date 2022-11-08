@@ -7,5 +7,6 @@ class Config:
     RESTX_JSON = {'ensure_ascii': False, 'indent': 4}
     SECRET = 'Sq$wW'
     ALGO = 'HS256'
+    POSTS_OF_PAGE = 12
 
 

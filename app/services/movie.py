@@ -1,5 +1,5 @@
 from app.dao.movies import MoviesDAO
-
+from utils.funcs import pagination
 
 class MovieService:
     def __init__(self, dao: MoviesDAO):
@@ -7,6 +7,13 @@ class MovieService:
 
     def get_all(self):
         return self.dao.get_all()
+
+    def get_page(self, page_number, status):
+        list_pages = pagination()
+        slice_argument = list_pages[page_number - 1]  # Кортеж из аргументов для запроса к БД
+        if status == True:
+            return self.dao.get_page(slice_argument, status)
+        return self.dao.get_page(slice_argument, status)
 
     def get_by_id(self, mid):
         return self.dao.get_by_id(mid)

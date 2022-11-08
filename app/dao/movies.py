@@ -8,6 +8,14 @@ class MoviesDAO():
     def get_all(self):
         return self.session.query(Movie).all()
 
+    def get_page(self, slice_argument, status):
+        """ Получение записей на заданной странице"""
+        if status == True:
+            # Получение записей с сортировкой по году
+            return self.session.query(Movie).order_by(-Movie.year).slice(slice_argument[0], slice_argument[1])
+        # Без сортировки по году
+        return self.session.query(Movie).slice(slice_argument[0], slice_argument[1])
+
     def get_by_id(self, mid):
         return self.session.query(Movie).get(mid)
 

@@ -1,5 +1,7 @@
 
 from app.dao.director import DirectorDAO
+from utils.funcs import pagination
+
 
 class DirectorService():
     def __init__(self, dao: DirectorDAO):
@@ -8,6 +10,11 @@ class DirectorService():
     def get_all(self):
         """Получение всех режиссеров"""
         return self.dao.get_all()
+
+    def get_page(self, page_number):
+        list_pages = pagination()
+        slice_argument = list_pages[page_number - 1]  # Кортеж из аргументов для запроса к БД
+        return self.dao.get_page(slice_argument)
 
     def get_by_id(self, did):
         """Получение режиссера по id"""

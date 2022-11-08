@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from app.config import Config
 from app.database import db
 from flask_restx import Api
@@ -34,10 +34,12 @@ def create_all():
     db.create_all()
 
 
+
 if __name__ == '__main__':
     app_config = Config()
     app = create_app(app_config)
     configure_app(app)
     create_all()
+
     app.run()
 

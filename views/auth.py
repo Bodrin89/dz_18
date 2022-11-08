@@ -12,16 +12,25 @@ algo = Config.ALGO
 auth_ns = Namespace('auth')
 
 
-@auth_ns.route('/')
+@auth_ns.route('/register')
 class AuthViews(Resource):
+
+    def post(self):
+        req_json = request.json
+        auth_service.create_user(req_json)
+        return 201
+
+
+@auth_ns.route('/login')
+class AuthViews(Resource):
+
     def post(self):
         data = request.json
-        user_name = data.get('username', None)
         password = data.get('password', None)
-        role = data.get('role', None)
-        if None in [user_name, password]:
+        email = data.get('email', None)
+        if None in [email, password]:
             return '', 400
-        token = auth_service.generate_token(user_name, password, role)
+        token = auth_service.generate_token(password, email)
         return token, 201
 
     def put(self):
@@ -29,3 +38,5 @@ class AuthViews(Resource):
         token = data.get('refresh_token')
         tokens = auth_service.approve_refresh_token(token)
         return tokens, 201
+
+

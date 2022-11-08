@@ -12,9 +12,14 @@ directors_schema = DirectorSchema(many=True)
 
 @director_ns.route('/')
 class DirectorViews(Resource):
-    @auth_required
+    # @auth_required
     def get(self):
         """Получение всех режиссеров"""
+        data = request.args
+        # поиск на странице если указан не обязательный URL-параметр 'page'
+        if data.get('page') is not None:
+            page = director_service.get_page(int(data.get('page')))
+            return directors_schema.dump(page)
         all_director = director_service.get_all()
         return directors_schema.dump(all_director), 200
 
@@ -26,7 +31,7 @@ class DirectorViews(Resource):
 
 @director_ns.route('/<int:did>')
 class DirectorViews(Resource):
-    @auth_required
+
     def get(self, did: int):
         """Получение режиссера по id"""
         director = director_service.get_by_id(did)

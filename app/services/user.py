@@ -1,40 +1,23 @@
-
-from app.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
-import hashlib
-import base64
-import hmac
-
+from app.dao.model.users import User
 from app.dao.users import UserDAO
 
 class UserService:
     def __init__(self, dao: UserDAO):
         self.dao = dao
 
-    def get_by_name(self, user_name):
-        """Получение юзера по имени и паролю"""
-        return self.dao.get_by_name(user_name)
+    def get_user(self, password, email):
+        """Получение юзера по паролю и email"""
+        return self.dao.get_user(password, email)
 
-    def create_user(self, user_data):
-        """Создание юзера"""
-        user_data['password'] = self.generate_password(user_data['password'])
-        return self.dao.create(user_data)
+    def get_user_id(self, uid):
+        """Получение юзера по id"""
+        return self.dao.get_user_id(uid)
 
-    def generate_password(self, password):
-        """ Создание хэша пароля"""
-        hash_digest = hashlib.pbkdf2_hmac(
-            'sha256',
-            password.encode('utf-8'),
-            PWD_HASH_SALT,
-            PWD_HASH_ITERATIONS
-        )
-        return base64.b64encode(hash_digest)
-
-    def compare_passwords(self, password_hash, other_password) -> bool:
-        decoded_digest = base64.b64decode(password_hash)
-        hash_digest = hashlib.pbkdf2_hmac(
-            'sha256',
-            other_password.encode(),
-            PWD_HASH_SALT,
-            PWD_HASH_ITERATIONS
-        )
-        return hmac.compare_digest(decoded_digest, hash_digest)
+    def update_user(self, data, user):
+        """Обновление имени, фамилии, любимого жанра пользователя"""
+        dict_update = {
+            User.name: data.get("name", user.name),
+            User.surname: data.get("surname", user.surname),
+            User.favorite_genre: data.get("favorite_genre", user.favorite_genre)
+        }
+        return self.dao.update_user(data, dict_update)

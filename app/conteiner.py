@@ -1,4 +1,4 @@
-
+from app.dao.auth import AuthDAO
 from app.database import db
 
 from app.dao.movies import MoviesDAO
@@ -25,4 +25,5 @@ director_service = DirectorService(director_dao)
 user_dao = UserDAO(db.session)
 user_service = UserService(user_dao)
 
-auth_service = AuthService(user_service)
+auth_dao = AuthDAO(db.session)
+auth_service = AuthService(user_service, auth_dao)
