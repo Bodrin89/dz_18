@@ -34,7 +34,6 @@ def create_all():
     db.create_all()
 
 
-
 if __name__ == '__main__':
     app_config = Config()
     app = create_app(app_config)

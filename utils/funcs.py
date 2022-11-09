@@ -1,5 +1,8 @@
+import base64
+import hashlib
 
 from app.config import Config
+from app.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 
 
 def pagination():
@@ -18,5 +21,19 @@ def check_email(array_email):
         for item in i:
             list_email.append(item)
     return list_email
+
+
+def generate_password(password):
+    """ Создание хэша пароля"""
+    hash_digest = hashlib.pbkdf2_hmac(
+        'sha256',
+        password.encode('utf-8'),
+        PWD_HASH_SALT,
+        PWD_HASH_ITERATIONS
+    )
+    return base64.b64encode(hash_digest)
+
+
+
 
 

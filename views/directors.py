@@ -4,7 +4,6 @@ from flask_restx import Resource, Namespace
 
 from app.conteiner import director_service
 from app.dao.model.director import DirectorSchema
-from utils.decorators import auth_required
 
 director_ns = Namespace('directors')
 director_schema = DirectorSchema()
@@ -12,7 +11,6 @@ directors_schema = DirectorSchema(many=True)
 
 @director_ns.route('/')
 class DirectorViews(Resource):
-    # @auth_required
     def get(self):
         """Получение всех режиссеров"""
         data = request.args
@@ -27,6 +25,7 @@ class DirectorViews(Resource):
         """Создание нового режиссера"""
         req_json = request.json
         director_service.create(req_json)
+        return "", 201
 
 
 @director_ns.route('/<int:did>')
@@ -35,16 +34,16 @@ class DirectorViews(Resource):
     def get(self, did: int):
         """Получение режиссера по id"""
         director = director_service.get_by_id(did)
-        return director_schema.dump(director)
+        return director_schema.dump(director), 200
 
     def put (self, did: int):
         """Обновление данных в режиссере"""
         req_json = request.json
         req_json['id'] = did
         director_service.update(req_json)
-        return "Обновленно", 200
+        return "Обновленно", 201
 
     def delete(self, did: int):
         """Удаление режиссера"""
         director_service.delete(did)
-        return "Удалено", 200
+        return "Удалено", 204

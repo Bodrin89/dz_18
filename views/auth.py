@@ -14,7 +14,7 @@ auth_ns = Namespace('auth')
 
 @auth_ns.route('/register')
 class AuthViews(Resource):
-
+    """Создание юзера"""
     def post(self):
         req_json = request.json
         auth_service.create_user(req_json)
@@ -23,7 +23,7 @@ class AuthViews(Resource):
 
 @auth_ns.route('/login')
 class AuthViews(Resource):
-
+    """Аутентификация пользователя"""
     def post(self):
         data = request.json
         password = data.get('password', None)
@@ -34,6 +34,7 @@ class AuthViews(Resource):
         return token, 201
 
     def put(self):
+        """Обновление токенов"""
         data = request.json
         token = data.get('refresh_token')
         tokens = auth_service.approve_refresh_token(token)

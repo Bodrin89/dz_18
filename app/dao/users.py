@@ -18,6 +18,9 @@ class UserDAO():
         self.session.query(User).filter(User.id == data['id']).update(dict_update)
         self.session.commit()
 
+    def update_password(self, data, dict_update):
+        self.session.query(User).filter(User.id == data['id']).update(dict_update)
+        self.session.commit()
 
 
 

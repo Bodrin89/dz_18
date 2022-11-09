@@ -11,6 +11,7 @@ class GenreDAO():
         return self.session.query(Genre).all()
 
     def get_page(self, slice_argument):
+        """Получение жанра по страницам"""
         return self.session.query(Genre).slice(slice_argument[0], slice_argument[1])
 
     def get_by_id(self, gid):

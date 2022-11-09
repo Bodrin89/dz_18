@@ -4,7 +4,6 @@ from flask_restx import Resource, Namespace
 from app.conteiner import genre_service
 from app.dao.model.genre import GenreSchema
 
-from utils.decorators import auth_required, admin_required
 
 genre_ns = Namespace('genres')
 genre_schema = GenreSchema()
@@ -39,17 +38,17 @@ class GenreViews(Resource):
     def get(self, gid: int):
         """Получение жанра по id"""
         genre = genre_service.get_by_id(gid)
-        return genre_schema.dump(genre)
+        return genre_schema.dump(genre), 200
 
     def put(self, gid: int):
         """Обновление данных в жанре"""
         req_json = request.json
         req_json['id'] = gid
         genre_service.update(req_json)
-        return "Обновленно", 200
+        return "Обновленно", 201
 
     def delete(self, gid: int):
         """Удаление жанра"""
         genre_service.delete(gid)
-        return "Удалено", 200
+        return "Удалено", 204
 

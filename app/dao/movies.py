@@ -6,6 +6,7 @@ class MoviesDAO():
         self.session = session
 
     def get_all(self):
+        """Получение всех фильмов"""
         return self.session.query(Movie).all()
 
     def get_page(self, slice_argument, status):
@@ -17,27 +18,22 @@ class MoviesDAO():
         return self.session.query(Movie).slice(slice_argument[0], slice_argument[1])
 
     def get_by_id(self, mid):
+        """Получить фильм по id"""
         return self.session.query(Movie).get(mid)
 
-    def get_by_director(self, did):
-        return self.session.query(Movie).filter(Movie.director_id == did)
-
-    def get_by_year(self, yid):
-        return self.session.query(Movie).filter(Movie.year == yid)
-
-    def get_by_genre(self, gid):
-        return self.session.query(Movie).filter(Movie.genre_id == gid)
-
     def create(self, data):
+        """Создать фильм"""
         movie = Movie(**data)
         self.session.add(movie)
         self.session.commit()
 
     def update(self, data):
+        """Обновить фильм"""
         self.session.add(data)
         self.session.commit()
 
     def delete(self, mid):
+        """Удалить фильм"""
         movie = self.get_by_id(mid)
         self.session.delete(movie)
         self.session.commit()

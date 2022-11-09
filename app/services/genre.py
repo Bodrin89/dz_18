@@ -2,6 +2,7 @@
 from app.dao.genre import GenreDAO
 from utils.funcs import pagination
 
+
 class GenreService():
     def __init__(self, dao: GenreDAO):
         self.dao = dao
@@ -11,6 +12,7 @@ class GenreService():
         return self.dao.get_all()
 
     def get_page(self, page_number):
+        """Получение жанра по страницам"""
         list_pages = pagination()
         slice_argument = list_pages[page_number - 1]  # Кортеж из аргументов для запроса к БД
         return self.dao.get_page(slice_argument)

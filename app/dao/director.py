@@ -10,6 +10,7 @@ class DirectorDAO():
         return self.session.query(Director).all()
 
     def get_page(self, slice_argument):
+        """Получение режиссеров по страницам"""
         return self.session.query(Director).slice(slice_argument[0], slice_argument[1])
 
     def get_by_id(self, did):

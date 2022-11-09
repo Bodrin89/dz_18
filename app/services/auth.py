@@ -11,6 +11,8 @@ import calendar
 import datetime
 import jwt
 
+from utils.funcs import generate_password
+
 secret = Config.SECRET
 algo = Config.ALGO
 
@@ -26,22 +28,23 @@ class AuthService:
         return self.dao.create(user_data)
 
     def generate_token(self, password, email, is_refresh=False):
-        password_hash = self.generate_password(password)
         """Создание токенов"""
+        password_hash = self.generate_password(password)
         user = self.user_service.get_user(password_hash, email)
         if user is None:
             raise abort(404)
+        print(is_refresh)
         if not is_refresh:
             if not self.compare_passwords(user.password, password):
                 raise abort(400)
 
-        """Создание токена с временем действия 30 минут"""
+        # Создание токена с временем действия 30 минут
         data = {'password': password, 'email': email}
         min_30 = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         data['exp'] = calendar.timegm(min_30.timetuple())
         access_token = jwt.encode(data, secret, algorithm=algo)
 
-        """Создание токена с временем действия 130 дней"""
+        # Создание токена с временем действия 130 дней
         data = {'password': password, 'email': email}
         days_130 = datetime.datetime.utcnow() + datetime.timedelta(days=130)
         data['exp'] = calendar.timegm(days_130.timetuple())
@@ -52,24 +55,18 @@ class AuthService:
         }
 
     def approve_refresh_token(self, refresh_token):
-
+        """Создание новой пары токенов из токена пользователя"""
         data = jwt.decode(jwt=refresh_token, key=secret, algorithms=[algo])
         password = data.get('password')
         email = data.get("email")
         return self.generate_token(password, email, is_refresh=True)
 
-
     def generate_password(self, password):
         """ Создание хэша пароля"""
-        hash_digest = hashlib.pbkdf2_hmac(
-            'sha256',
-            password.encode('utf-8'),
-            PWD_HASH_SALT,
-            PWD_HASH_ITERATIONS
-        )
-        return base64.b64encode(hash_digest)
+        return generate_password(password)  # Функция хеширования пароля
 
     def compare_passwords(self, password_hash, other_password) -> bool:
+        """Сравнение паролей"""
         decoded_digest = base64.b64decode(password_hash)
         hash_digest = hashlib.pbkdf2_hmac(
             'sha256',
