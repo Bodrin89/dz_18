@@ -8,7 +8,7 @@ from app.constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS
 def pagination():
     """ Функция разбиения данных на страницы"""
     posts = Config.POSTS_OF_PAGE  # Количество записей на странице
-    dict_pages = {x: x + posts for x in range(10000)[::12]}  # Разбиение на страницы по кол-ву записей
+    dict_pages = {x: x + posts for x in range(10000)[::posts]}  # Разбиение на страницы по кол-ву записей
     list_pages = []
     for i in dict_pages.items():
         list_pages.append(i)

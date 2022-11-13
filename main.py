@@ -15,12 +15,16 @@ def create_app(config: Config) -> Flask:
     application = Flask(__name__)
     application.config.from_object(config)
     application.app_context().push()
-
     return application
 
 
 def configure_app(application: Flask):
     ''' Конфигурация приложения '''
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
     db.init_app(application)
     api = Api(application)
     api.add_namespace(movie_ns)
